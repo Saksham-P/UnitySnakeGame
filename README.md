@@ -19,4 +19,4 @@ If you would like to look at a mini demo of how the gameplay works, and see the 
 https://user-images.githubusercontent.com/84263133/190878569-664c4f12-13fa-48c6-9135-93910709a9cf.mp4
 
 
-Most of the code yet hasn't been commented and I will try to get that done as soon as I get time
+All the Code has been commented and described, with updated fintess calculations to make the snakes learn to go for food rather than stay alive the longest

@@ -4,22 +4,25 @@ using UnityEngine;
 
 public class Snake : MonoBehaviour
 {
+    //Initial state of the snake ---------------------------------------------------------------------
     private Vector2 direction = Vector2.right;
     private List<Transform> segments = new List<Transform>();
     public Transform bodySegment;
     public Transform food;
     public int initialSize = 3;
 
-    //Genetic Algorithm Stuff --------------------------------------------------------------------------
+    //Genetic Algorithm Variables --------------------------------------------------------------------------
     public NeuralNetwork brain;
     private float[] inputs;
     private float[] outputs;
 
+    //Number of Nodes and Mutation Rate --------------------------------------------------------------------
     private int inputNodes = 24;
     private int hiddenNodes = 16;
     private int outputNodes = 4;
     private float mutationRate = 0.33f;
 
+    //Snake Information ------------------------------------------------------------------------------------
     private int movesDone = 0;
     public int score = 0;
     public long fitness = 0;
@@ -34,10 +37,12 @@ public class Snake : MonoBehaviour
     private int topWall;
     private int bottomWall;
 
+    //Variable that chooses whether a player will be playing or an Nachine Learning Algorithm
     private bool playMode = false;
     public Transform check;
     private List<Transform> checkObject = new List<Transform>();
 
+    //On Awake, create the food, Neural Network and the Bounds for Snake
     private void Awake() {
         food = Instantiate(food);
 
@@ -50,10 +55,10 @@ public class Snake : MonoBehaviour
         topWall = (int)Mathf.Round(food.GetComponent<Food>().gridArea.bounds.max.y);
         bottomWall = (int)Mathf.Round(food.GetComponent<Food>().gridArea.bounds.min.y);
 
-        
-
         resetState();
     }
+
+    //Keep checking for user input if in playMode
     private void Update()
     {
         if (playMode) {
@@ -78,12 +83,12 @@ public class Snake : MonoBehaviour
                 movesDone++;
             }
         }
-        else {
-            
-        }  
     }
 
+    //Loop that runs regardless of user frames per second
     private void FixedUpdate() {
+
+        //If not in playmode, decide the next move snake is going to do
         if (!playMode) {
             // for (int i = 0; i < checkObject.Count; i++) {
             //     Destroy(checkObject[i].gameObject);
@@ -93,21 +98,27 @@ public class Snake : MonoBehaviour
             // Debug.Break();
         }
 
+        //Decrement the moves left and increment the moves done
         movesDone += 1;
         movesLeft -= 1;
         fitnessScore -= 1;
 
+        //Set the variable for snake prev position
         previousPos = transform.position;
 
+        //Set the position of all the segments
         for (int i = segments.Count - 1; i > 0; i--) {
             segments[i].position = segments[i-1].position;
         }
 
+        //Round the position of the snakes to give the pixel snake feeling
         transform.position = new Vector3(
             Mathf.Round(transform.position.x) + direction.x,
             Mathf.Round(transform.position.y) + direction.y,
             0.0f
         );
+
+        //If getting closer to the food particle, then increase fitness, otherwise decrease fitness
         if (Mathf.Abs((food.position - transform.position).magnitude) < Mathf.Abs((food.position - previousPos).magnitude)) {
             fitnessScore += 2;
         }
@@ -116,6 +127,7 @@ public class Snake : MonoBehaviour
         }
     }
 
+    //Grow the Snake if Snake ate food
     private void grow() {
         Transform segment = Instantiate(bodySegment);
         segment.position = segments[segments.Count - 1].position;
@@ -125,6 +137,7 @@ public class Snake : MonoBehaviour
         score++;
     }
 
+    //Reset the State of the snake by destroying it's segments, and clearing the segments from scene
     private void resetState() {
         for (int i = 1; i < segments.Count; i++) {
             Destroy(segments[i].gameObject);
@@ -138,22 +151,27 @@ public class Snake : MonoBehaviour
         transform.position = Vector3.zero;
     }
 
+    //If Snake collides with another object
     private void OnTriggerEnter2D(Collider2D other) {
+        
+        //If the collided object is a food particle, grow the snake and randomize food again
         if (other == food.GetComponent<Collider2D>()) {
             food.GetComponent<Food>().randomizePosition();
             grow();
         }
+        
+        //If collided object is an obstacle or Wall, resetState if in playMode, otherwise kill the Snake
         if (other.tag == "Obstacle" || other.tag == "Wall") {
             if (playMode)
                 resetState();
             else {
                 if (other.tag == "Wall") {
                     //Debug.Log("HIt the Wall");
-                    fitnessScore -= 50;
+                    fitnessScore -= 75;
                     Died();
                 }
                 else if (segments.Contains(other.transform)){
-                    fitnessScore -=50;
+                    fitnessScore -=75;
                     //movesDone -= 5;
                     //Debug.Log("Hit my Tail");
                     Died();
@@ -167,6 +185,7 @@ public class Snake : MonoBehaviour
         brain.mutate();
     }
 
+    //Decide the next move for snake
     private void decide() {
         //Fills the Input Array
         look();
@@ -207,8 +226,8 @@ public class Snake : MonoBehaviour
         }
     }
 
+    //Observes the surroundings from the Snake head
     private void look() {
-        //Look Left
         // Debug.Log("Checking Left");
         float[] temp = lookInDirection(Vector2.left);
         inputs[0] = temp[0];
@@ -257,7 +276,10 @@ public class Snake : MonoBehaviour
         // Debug.Log(temp1);
     }
 
+    //Look in the specified direction from the Snake Head
     private float[] lookInDirection(Vector2 direction) {
+
+        //Create an array to store observations
         float[] visionInDirection = new float[3];
         Vector2 positionLooking = new Vector2(transform.position.x, transform.position.y);
         bool foodFound = false;
@@ -271,16 +293,22 @@ public class Snake : MonoBehaviour
 
         while (!(positionLooking.x < leftWall || positionLooking.y < bottomWall || positionLooking.x > rightWall || positionLooking.y > topWall)) {
             // checkObject.Add(Instantiate(check, positionLooking, Quaternion.identity));
+
+            //If food found
             if (!foodFound && positionLooking.x == food.position.x && positionLooking.y == food.position.y) {
                 visionInDirection[0] = 1;
                 foodFound = true;
                 // Debug.Log("Food Found");
             }
+
+            //If tail found
             if (!tailFound && isTail(positionLooking.x, positionLooking.y)) {
                 visionInDirection[1] = 1/distance;
                 tailFound = true;
                 // Debug.Log("Tail Found");
             }
+
+            //Distance until Wall
             positionLooking += direction;
             distance += 1;
         }
@@ -291,6 +319,7 @@ public class Snake : MonoBehaviour
         return visionInDirection;
     }
 
+    //Function to check if a given position is tail
     private bool isTail(float x, float y) {
         for (int i = 1; i < segments.Count; i++) {
             if (segments[i].position.x == x && segments[i].position.y == y) {
@@ -300,6 +329,7 @@ public class Snake : MonoBehaviour
         return false;
     }
 
+    //Move the snake in specified direction
     private void move(Vector2 direction) {
         if (movesLeft < 0) {
             //movesDone -= 10;
@@ -310,6 +340,7 @@ public class Snake : MonoBehaviour
         this.direction = direction;
     }
 
+    //Kill the snake and Calculate the fitness of the snake
     private void Died() {
         alive = false;
         Destroy(food.gameObject);
@@ -319,17 +350,24 @@ public class Snake : MonoBehaviour
         }
     }
 
+    //Delete all segments of Snake
     public void del() {
         for(int i = segments.Count-1; i >= 0; i--) {
             Destroy(segments[i].gameObject);
         }
     }
 
+    //Calculate the fitness of the snake
     private void calculateFitness() {
+
+        //If the fitness score of the snake is negative make it 0
         if (fitnessScore < 0) {
             fitnessScore = 0;
         }
+
+        //Calculate the fitness
         fitness = fitnessScore*fitnessScore + movesDone * movesDone/4;
+
         // if (score < 10) {
         //     if (fitnessScore < 0) {
         //         fitnessScore = 0;
@@ -350,6 +388,7 @@ public class Snake : MonoBehaviour
         // }
     }
 
+    //Crossover the Snake with another snake to create a child Snake
     public NeuralNetwork crossover(Snake partner) {
         NeuralNetwork childBrain = new NeuralNetwork(brain);
 
@@ -357,6 +396,7 @@ public class Snake : MonoBehaviour
         return childBrain;
     }
 
+    //Set the brain of this snake
     public void setBrain(NeuralNetwork brain) {
         this.brain = brain;
     }

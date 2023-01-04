@@ -5,374 +5,40 @@ using UnityEngine;
 [System.Serializable]
 public class Matrix
 {
-    // //local variables
-    // int rows;
-    // int cols;
-    // float[,] matrix;
-
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //constructor
-    // public Matrix(int r, int c)
-    // {
-    //     rows = r;
-    //     cols = c;
-    //     matrix = new float[rows, cols];
-    // }
-
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //constructor from 2D array
-    // public Matrix(float[,] m)
-    // {
-    //     matrix = m;
-    //     cols = m.GetLength(0);
-    //     rows = m.GetLength(1);
-    // }
-
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //print matrix
-    // public void output()
-    // {
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             Debug.Log(matrix[i,j] + "  ");
-    //         }
-    //         Debug.Log("\n");
-    //     }
-    //     Debug.Log("\n");
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-
-    // //multiply by scalar
-    // public void multiply(float n)
-    // {
-
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             matrix[i,j] *= n;
-    //         }
-    //     }
-    // }
-
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //return a matrix which is this matrix dot product parameter matrix 
-    // public Matrix dot(Matrix n)
-    // {
-    //     Matrix result = new Matrix(rows, n.cols);
-
-    //     if (cols == n.rows)
-    //     {
-    //         //for each spot in the new matrix
-    //         for (int i = 0; i < rows; i++)
-    //         {
-    //             for (int j = 0; j < n.cols; j++)
-    //             {
-    //                 float sum = 0;
-    //                 for (int k = 0; k < cols; k++)
-    //                 {
-    //                     sum += matrix[i,k] * n.matrix[k,j];
-    //                 }
-    //                 result.matrix[i,j] = sum;
-    //             }
-    //         }
-    //     }
-
-    //     return result;
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //set the matrix to random ints between -1 and 1
-    // public void randomize()
-    // {
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             matrix[i,j] = Random.Range(-1.0f, 1.0f);
-    //         }
-    //     }
-    // }
-
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //add a scalar to the matrix
-    // public void Add(float n)
-    // {
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             matrix[i,j] += n;
-    //         }
-    //     }
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // ///return a matrix which is this matrix + parameter matrix
-    // public Matrix add(Matrix n)
-    // {
-    //     Matrix newMatrix = new Matrix(rows, cols);
-    //     if (cols == n.cols && rows == n.rows)
-    //     {
-    //         for (int i = 0; i < rows; i++)
-    //         {
-    //             for (int j = 0; j < cols; j++)
-    //             {
-    //                 newMatrix.matrix[i,j] = matrix[i,j] + n.matrix[i,j];
-    //             }
-    //         }
-    //     }
-    //     return newMatrix;
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //return a matrix which is this matrix - parameter matrix
-    // public Matrix subtract(Matrix n)
-    // {
-    //     Matrix newMatrix = new Matrix(cols, rows);
-    //     if (cols == n.cols && rows == n.rows)
-    //     {
-    //         for (int i = 0; i < rows; i++)
-    //         {
-    //             for (int j = 0; j < cols; j++)
-    //             {
-    //                 newMatrix.matrix[i,j] = matrix[i,j] - n.matrix[i,j];
-    //             }
-    //         }
-    //     }
-    //     return newMatrix;
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //return a matrix which is this matrix * parameter matrix (element wise multiplication)
-    // public Matrix multiply(Matrix n)
-    // {
-    //     Matrix newMatrix = new Matrix(rows, cols);
-    //     if (cols == n.cols && rows == n.rows)
-    //     {
-    //         for (int i = 0; i < rows; i++)
-    //         {
-    //             for (int j = 0; j < cols; j++)
-    //             {
-    //                 newMatrix.matrix[i,j] = matrix[i,j] * n.matrix[i,j];
-    //             }
-    //         }
-    //     }
-    //     return newMatrix;
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //return a matrix which is the transpose of this matrix
-    // public Matrix transpose()
-    // {
-    //     Matrix n = new Matrix(cols, rows);
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             n.matrix[j,i] = matrix[i,j];
-    //         }
-    //     }
-    //     return n;
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //Creates a single column array from the parameter array
-    // public Matrix singleColumnMatrixFromArray(float[] arr)
-    // {
-    //     Matrix n = new Matrix(arr.Length, 1);
-    //     for (int i = 0; i < arr.Length; i++)
-    //     {
-    //         n.matrix[i,0] = arr[i];
-    //     }
-    //     return n;
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //sets this matrix from an array
-    // public void fromArray(float[] arr)
-    // {
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             matrix[i,j] = arr[j + i * cols];
-    //         }
-    //     }
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------    
-    // //returns an array which represents this matrix
-    // public float[] toArray()
-    // {
-    //     float[] arr = new float[rows * cols];
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             arr[j + i * cols] = matrix[i,j];
-    //         }
-    //     }
-    //     return arr;
-    // }
-
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //for ix1 matrixes adds one to the bottom
-    // public Matrix addBias()
-    // {
-    //     Matrix n = new Matrix(rows + 1, 1);
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         n.matrix[i,0] = matrix[i,0];
-    //     }
-    //     n.matrix[rows,0] = 1;
-    //     return n;
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //applies the activation function(sigmoid) to each element of the matrix
-    // public Matrix activate()
-    // {
-    //     Matrix n = new Matrix(rows, cols);
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             n.matrix[i,j] = sigmoid(matrix[i,j]);
-    //         }
-    //     }
-    //     return n;
-    // }
-
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------    
-    // //sigmoid activation function
-    // public float sigmoid(float x)
-    // {
-    //     float y = 1 / (1 + (float)Mathf.Exp(-x));
-    //     return y;
-    // }
-    // //returns the matrix that is the derived sigmoid function of the current matrix
-    // public Matrix sigmoidDerived()
-    // {
-    //     Matrix n = new Matrix(rows, cols);
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             n.matrix[i,j] = (matrix[i,j] * (1 - matrix[i,j]));
-    //         }
-    //     }
-    //     return n;
-    // }
-
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //returns the matrix which is this matrix with the bottom layer removed
-    // public Matrix removeBottomLayer()
-    // {
-    //     Matrix n = new Matrix(rows - 1, cols);
-    //     for (int i = 0; i < n.rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             n.matrix[i,j] = matrix[i,j];
-    //         }
-    //     }
-    //     return n;
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //Mutation function for genetic algorithm 
-
-    // public void mutate(float mutationRate)
-    // {
-
-    //     //for each element in the matrix
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             float rand = Random.Range(0.0f, 1.0f);
-    //             if (rand < mutationRate)
-    //             {//if chosen to be mutated
-    //                 matrix[i,j] += randomGaussian(0, 1) / 5;//add a random value to it(can be negative)
-
-    //                 //set the boundaries to 1 and -1
-    //                 if (matrix[i,j] > 1)
-    //                 {
-    //                     matrix[i,j] = 1;
-    //                 }
-    //                 if (matrix[i,j] < -1)
-    //                 {
-    //                     matrix[i,j] = -1;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    //Gaussian Method
-    private float randomGaussian(float mean, float stddev)
-        {
-            // The method requires sampling from a uniform random of (0,1]
-            // but Random.NextDouble() returns a sample of [0,1).
-            float x1 = Random.Range(0.01f, 1);
-            float x2 = Random.Range(0.01f, 1);
-
-            float y1 = Mathf.Sqrt(-2.0f * Mathf.Log(x1)) * Mathf.Cos(2.0f * Mathf.PI * x2);
-            return y1 * stddev + mean;
-        }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //returns a matrix which has a random number of values from this matrix and the rest from the parameter matrix
-    // public Matrix crossover(Matrix partner)
-    // {
-    //     Matrix child = new Matrix(rows, cols);
-
-    //     //pick a random point in the matrix
-    //     int randC = Mathf.FloorToInt(Random.Range(0.0f, cols));
-    //     int randR = Mathf.FloorToInt(Random.Range(0.0f, rows));
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-
-    //             if ((i < randR) || (i == randR && j <= randC))
-    //             { //if before the random point then copy from this matric
-    //                 child.matrix[i,j] = matrix[i,j];
-    //             }
-    //             else
-    //             { //if after the random point then copy from the parameter array
-    //                 child.matrix[i,j] = partner.matrix[i,j];
-    //             }
-    //         }
-    //     }
-    //     return child;
-    // }
-    // //---------------------------------------------------------------------------------------------------------------------------------------------------------  
-    // //return a copy of this matrix
-    // public Matrix clone()
-    // {
-    //     Matrix clone = new Matrix(rows, cols);
-    //     for (int i = 0; i < rows; i++)
-    //     {
-    //         for (int j = 0; j < cols; j++)
-    //         {
-    //             clone.matrix[i,j] = matrix[i,j];
-    //         }
-    //     }
-    //     return clone;
-    // }
+    //Jagged Array that stores the values of the matrix
     public float[][] mat;
+
+    //rows of the matrix and the columns of the matrix
     int rows;
     int cols;
 
+    //Matrix constructor with rows and columns as parameters
     public Matrix(int rows, int cols) {
+
+        //initializing the variables
         this.rows = rows;
         this.cols = cols;
 
         mat = createMatrix(rows, cols);
     }
 
+    //Matrix constructor with an array as the parameter
     public Matrix(float[] arr) {
+
+        //the amaount of rows is equal to the length of the array with 1 column
         rows = arr.Length;
         cols = 1;
+
+        //create the matrix 
         mat = createMatrix(rows, cols);
+
+        //fill in the matrix
         for (int i = 0; i < rows; i++) {
             mat[i][0] = arr[i];
         }
     }
 
+    //create the skeleton of matrix by returning Jagged Array
     public float[][] createMatrix(int rows, int cols) {
         float[][] result = new float[rows][];
         for (int i = 0; i < rows; ++i)
@@ -380,6 +46,7 @@ public class Matrix
         return result;
     }
 
+    //Randomize the values of the matrix
     public void randomize() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0 ; j < cols; j++) {
@@ -388,6 +55,7 @@ public class Matrix
         }
     }
 
+    //Mutate the current Matrix by changing only mutationRate percentage of values in the array by a random number between -0.20 - 0.20
     public void mutate(float mutationRate) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0 ; j < cols; j++) {
@@ -406,6 +74,7 @@ public class Matrix
         }
     }
 
+    //crossover the two parent matrices to create a new child matrix with values from both parents
     public Matrix crossover(Matrix partner) {
         Matrix child = new Matrix(rows, cols);
 
@@ -429,6 +98,7 @@ public class Matrix
     //     return (1/(0.1f * Mathf.Sqrt(2 * Mathf.PI))) * Mathf.Exp((-1/2) * Mathf.Pow(((x - 0.5f)/0.11f),2));
     // }
 
+    //return a copy of this matrix
     public Matrix copy() {
         Matrix temp = new Matrix(rows, cols);
          for (int i = 0; i < rows; i++) {
@@ -439,6 +109,7 @@ public class Matrix
         return temp;
     }
 
+    //Scalar matrix addition
     public void add(float n) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0 ; j < cols; j++) {
@@ -447,6 +118,7 @@ public class Matrix
         }
     }
 
+    //Matrix addition with another matrix
     public Matrix add(Matrix n) {
         if (rows != n.rows || cols != n.cols) {
             Debug.Log("Matrices are not compatible to be added together");
@@ -460,6 +132,7 @@ public class Matrix
         return newMatrix;
     }
 
+    //Scalar matrix multiplication
     public void multiply(float n) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0 ; j < cols; j++) {
@@ -468,6 +141,7 @@ public class Matrix
         }
     }
 
+    //Matrix multiplication with another matrix
     public static Matrix multiply(Matrix a, Matrix b) {
         int aRows = a.rows;
         int aCols = a.cols;
@@ -489,6 +163,7 @@ public class Matrix
         return temp;
     }
 
+    //Apply sigmoid function on matrix for normalization
     public void applySigmoid() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0 ; j < cols; j++) {
@@ -499,6 +174,7 @@ public class Matrix
 
     }
 
+    //Create a new row in the matrix to add the biases into the matrix
     public Matrix addBias() {
         Matrix newMat = new Matrix(rows+1, cols);
         for (int i = 0; i < rows; i++) {
@@ -508,6 +184,7 @@ public class Matrix
         return newMat;
     }
 
+    //Converting the matrix to an array
     public float[] toArray() {
         int pro = cols * rows;
         float[] temp = new float[pro];
@@ -521,6 +198,7 @@ public class Matrix
         return temp;
     }
 
+    //Printing out the matrix
     public string print() {
         string temp = "";
         for (int i = 0; i < rows; i++) {
@@ -536,4 +214,3 @@ public class Matrix
         return temp;
     }
 }
-
